@@ -280,9 +280,9 @@ class Player(object):
     def stop(self):
         if self.playing_flag and self.popen_handler:
             self.playing_flag = False
-            self.popen_handler.stdin.write(b'Q\n')
-            self.popen_handler.stdin.flush()
             try:
+                self.popen_handler.stdin.write(b'Q\n')
+                self.popen_handler.stdin.flush()
                 self.popen_handler.kill()
             except OSError as e:
                 log.error(e)
