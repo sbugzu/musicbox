@@ -292,7 +292,6 @@ class Player(object):
                 self.popen_handler.kill()
             except IOError as e:
                 log.error(e)
-                return
 
     def pause(self):
         if not self.playing_flag and not self.popen_handler:
@@ -447,9 +446,13 @@ class Player(object):
             self.info['playing_volume'] = 100
         if not self.playing_flag:
             return
-        self.popen_handler.stdin.write(b'V ' + str(self.info[
-            'playing_volume']).encode('utf-8') + b'\n')
-        self.popen_handler.stdin.flush()
+
+        try:
+            self.popen_handler.stdin.write(b'V ' + str(self.info[
+                'playing_volume']).encode('utf-8') + b'\n')
+            self.popen_handler.stdin.flush()
+        except IOError as e:
+            log.error(e)
 
     def volume_down(self):
         self.info['playing_volume'] = self.info['playing_volume'] - 7
@@ -458,9 +461,12 @@ class Player(object):
         if not self.playing_flag:
             return
 
-        self.popen_handler.stdin.write(b'V ' + str(self.info[
-            'playing_volume']).encode('utf-8') + b'\n')
-        self.popen_handler.stdin.flush()
+        try:
+            self.popen_handler.stdin.write(b'V ' + str(self.info[
+                'playing_volume']).encode('utf-8') + b'\n')
+            self.popen_handler.stdin.flush()
+        except IOError as e:
+            log.error(e)
 
     def update_size(self):
         self.ui.update_size()
